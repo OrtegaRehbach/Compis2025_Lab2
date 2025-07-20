@@ -4,6 +4,9 @@ from custom_types import IntType, FloatType, StringType, BoolType
 
 class TypeCheckVisitor(SimpleLangVisitor):
 
+  def __init__(self):
+    self.errors = []
+
   def visitMulDiv(self, ctx: SimpleLangParser.MulDivContext):
     left_type = self.visit(ctx.expr(0))
     right_type = self.visit(ctx.expr(1))
@@ -11,7 +14,7 @@ class TypeCheckVisitor(SimpleLangVisitor):
     if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
         return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
     else:
-        raise TypeError("Unsupported operand types for * or /: {} and {}".format(left_type, right_type))
+        self.errors.append(f"Unsupported operand types for * or /: {left_type} and {right_type}")
 
   def visitAddSub(self, ctx: SimpleLangParser.AddSubContext):
     left_type = self.visit(ctx.expr(0))
@@ -20,7 +23,7 @@ class TypeCheckVisitor(SimpleLangVisitor):
     if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
         return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
     else:
-        raise TypeError("Unsupported operand types for + or -: {} and {}".format(left_type, right_type))
+        self.errors.append(f"Unsupported operand types for + or -: {left_type} and {right_type}")
   
   def visitInt(self, ctx: SimpleLangParser.IntContext):
     return IntType()

@@ -12,10 +12,13 @@ def main(argv):
     tree = parser.prog()
 
     visitor = TypeCheckVisitor()
-    try:
-        visitor.visit(tree)
+    visitor.visit(tree) # Visit the root
+    
+    if not visitor.errors:
         print("Type checking passed")
-    except TypeError as e:
+        return
+    
+    for e in visitor.errors:
         print(f"Type checking error: {e}")
 
 if __name__ == '__main__':
