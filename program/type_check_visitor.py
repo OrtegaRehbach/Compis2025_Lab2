@@ -7,6 +7,13 @@ class TypeCheckVisitor(SimpleLangVisitor):
   def __init__(self):
     self.errors = []
 
+  def visitMod(self, ctx: SimpleLangParser.ModContext):
+    left_type = self.visit(ctx.expr(0))
+    right_type = self.visit(ctx.expr(1))
+    if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
+        return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
+    self.errors.append(f"Unsupported operand types for %: {left_type} and {right_type}")
+  
   def visitMulDiv(self, ctx: SimpleLangParser.MulDivContext):
     left_type = self.visit(ctx.expr(0))
     right_type = self.visit(ctx.expr(1))
@@ -24,6 +31,13 @@ class TypeCheckVisitor(SimpleLangVisitor):
         return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
     else:
         self.errors.append(f"Unsupported operand types for + or -: {left_type} and {right_type}")
+  
+  def visitPow(self, ctx: SimpleLangParser.PowContext):
+    left_type = self.visit(ctx.expr(0))
+    right_type = self.visit(ctx.expr(1))
+    if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
+        return FloatType()
+    self.errors.append(f"Unsupported operand types for ^: {left_type} and {right_type}")
   
   def visitInt(self, ctx: SimpleLangParser.IntContext):
     return IntType()
