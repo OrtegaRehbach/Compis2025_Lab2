@@ -35,21 +35,21 @@ class SimpleLangListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SimpleLangParser#Mod.
+    def enterMod(self, ctx:SimpleLangParser.ModContext):
+        pass
+
+    # Exit a parse tree produced by SimpleLangParser#Mod.
+    def exitMod(self, ctx:SimpleLangParser.ModContext):
+        pass
+
+
     # Enter a parse tree produced by SimpleLangParser#Bool.
     def enterBool(self, ctx:SimpleLangParser.BoolContext):
         pass
 
     # Exit a parse tree produced by SimpleLangParser#Bool.
     def exitBool(self, ctx:SimpleLangParser.BoolContext):
-        pass
-
-
-    # Enter a parse tree produced by SimpleLangParser#MulDiv.
-    def enterMulDiv(self, ctx:SimpleLangParser.MulDivContext):
-        pass
-
-    # Exit a parse tree produced by SimpleLangParser#MulDiv.
-    def exitMulDiv(self, ctx:SimpleLangParser.MulDivContext):
         pass
 
 
@@ -62,12 +62,30 @@ class SimpleLangListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by SimpleLangParser#MulDiv.
+    def enterMulDiv(self, ctx:SimpleLangParser.MulDivContext):
+        pass
+
+    # Exit a parse tree produced by SimpleLangParser#MulDiv.
+    def exitMulDiv(self, ctx:SimpleLangParser.MulDivContext):
+        pass
+
+
     # Enter a parse tree produced by SimpleLangParser#Parens.
     def enterParens(self, ctx:SimpleLangParser.ParensContext):
         pass
 
     # Exit a parse tree produced by SimpleLangParser#Parens.
     def exitParens(self, ctx:SimpleLangParser.ParensContext):
+        pass
+
+
+    # Enter a parse tree produced by SimpleLangParser#Pow.
+    def enterPow(self, ctx:SimpleLangParser.PowContext):
+        pass
+
+    # Exit a parse tree produced by SimpleLangParser#Pow.
+    def exitPow(self, ctx:SimpleLangParser.PowContext):
         pass
 
 
