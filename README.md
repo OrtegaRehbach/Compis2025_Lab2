@@ -1,48 +1,78 @@
-# 🧪 Laboratorio 2: Sistema de Tipos con ANTLR
+# Laboratorio 2: Sistema de Tipos con ANTLR
 
-## 📋 Descripción General
+Este repositorio contiene el laboratorio 2 del curso “Construcción de Compiladores” en UVG. El objetivo es:
 
-En este laboratorio trabajarás con **ANTLR**, un generador de analizadores sintácticos. Hemos proporcionado un `Dockerfile` para ayudarte a configurar el entorno rápidamente. Utilizaremos Python para hacer pruebas, ya que es más sencillo que Java para pruebas pequeñas.
+* Generar un *lexer* y *parser* con ANTLR en Python
+* Implementar un sistema de chequeo de tipos tanto con *Visitor* como con *Listener*
+* Analizar casos de prueba que pasan y que fallan
+* Extender la gramática con dos nuevas operaciones
+* Ampliar el sistema de tipos para detectar al menos tres nuevos conflictos
+* Documentar la solución en un video de YouTube (no listado) y publicar el código en GitHub
 
-Experimentarás con un sistema de tipos básico, extenderás una gramática y completarás el sistema de tipos. Con ello, aprenderás sobre la marcha lo básico al utilizar sistemas de tipos en el análisis semántico.
+## Contenido
 
-* **Modalidad: Individual**
+* **`SimpleLang.g4`**: Gramática ANTLR para SimpleLang (expr, literales, paréntesis)
+* **`Driver.py`**: Driver Python que recorre el árbol con un *Visitor*
+* **`type_check_visitor.py`**: Implementación del chequeo de tipos con *Visitor*
+* **`DriverListener.py`**: Driver Python que recorre el árbol con un *Listener*
+* **`type_check_listener.py`**: Implementación del chequeo de tipos con *Listener*
+* **`custom_types.py`**: Definición de las clases `IntType`, `FloatType`, `StringType`, `BoolType`
+* **`program_test_pass.txt`**: Ejemplos válidos que deben pasar sin errores
+* **`program_test_no_pass.txt`**: Ejemplos con errores de tipos que deben detectarse
+* **`README.md`**: Este documento
 
-## 🧰 Instrucciones de Configuración
+## Requisitos Previos
 
-1. **Construir y Ejecutar el Contenedor Docker**Desde el directorio raíz de este laboratorio, ejecuta el siguiente comando para construir la imagen y lanzar un contenedor interactivo:
+* Docker (Windows, macOS o Linux).
+* Conexión a internet para descargar imágenes y paquetes.
 
-   ```bash
-   docker build --rm . -t lab2-image && docker run --rm -ti -v "$(pwd)/program":/program lab2-image
-   ```
-2. **Entender el Entorno**
+## Construcción de la Imagen Docker
 
-   - El directorio `program` se monta dentro del contenedor.
-   - Este contiene la **gramática de ANTLR**, un archivo `Driver.py` (punto de entrada principal) y un archivo `program_test.txt` (entrada de prueba).
-   - En este caso usamos un Visitor para visitar los nodos del árbol y aplicar análisis semántico.
-   - También se  un Listener para este efecto.
-3. **Generar Archivos de Lexer y Parser:** Dentro del contenedor, compila la gramática ANTLR a Python con:
+Desde la raíz de este repositorio:
 
-   ```bash
-   antlr -Dlanguage=Python3 -visitor SimpleLang.g4			*** Esto es para utilizar un Visitor ***
-   antlr -Dlanguage=Python3 -listener SimpleLang.g4		*** Y esto es para utilizar un Listener ***
-   ```
-4. **Ejecutar el Analizador**
-   Usa el driver para analizar el archivo de prueba:
+```bash
+docker build --rm -t lab2-image .
+```
 
-   ```bash
-   python3 Driver.py program_test_pass.txt
-   python3 DriverListener.py program_test_pass.txt
-   ```
+## Ejecución del Contenedor
 
-   - ✅ Si el archivo es sintácticamente correcto y, además, no hay problemas de tipo, **se mostrará que la validación de tipos fue exitosa**.
-   - ❌ Si existen errores sintácticos, o errores de tipo, ANTLR los mostrará en la consola.
+Para montar la carpeta `program` y abrir un shell interactivo:
 
-## 📋 Entregables
+```bash
+docker run --rm -it -v "${PWD}/program:/program" lab2-image bash
+```
 
-- **Deben utilizar ambos Visitor y Listener para realizar las actividades de este lab.**
-- Analice la ejecución con los archivos provistos, comente acerca de porqué el archivo "pass" si "pasa" y por qué el archivo "no pass" pues, "no pasa" lol.
-- Extienda la gramática de ANTLR para incluir otras dos operaciones, las que sean de su agrado.
-- Ahora extienda más el sistema de tipos para validar al menos otros 3 conflictos de tipos.
-- **Video de YouTube no listado** (pero público) con los resultados de ejecutar los puntos anteriores y sus comentarios.
-- Repo de Github con todo su código.
+> En PowerShell se utiliza `${PWD}`; en CMD se puede usar `%cd%`.
+
+## Generación del Parser
+
+Dentro del contenedor, en `/program`:
+
+ ```bash
+antlr -Dlanguage=Python3 -visitor SimpleLang.g4			*** Para generar archivos para Visitor ***
+antlr -Dlanguage=Python3 -listener SimpleLang.g4		*** Para generar archivos para Listener ***
+```
+
+## Ejecución del Driver
+
+Para el archivo de prueba **sin errores**
+```bash
+python3 Driver.py program_test_pass.txt               *** Ejecutar con Visitor ***
+python3 DriverListener.py program_test_pass.txt       *** Ejecutar con Listener ***
+```
+
+Para el archivo de prueba que **contiene errores**
+```bash
+python3 Driver.py program_test_pass.txt               *** Ejecutar con Visitor ***
+python3 DriverListener.py program_test_pass.txt       *** Ejecutar con Listener ***
+```
+
+* **Sin errores**: la sintaxis y las operaciones entre tipos del programa son válidas.
+* **Con errores**: Se mostrarán mensajes que describen el error.
+
+## Video de Demostración
+
+Video con la explicación:
+
+[https://youtu.be/WrOVtlEXm6E](https://youtu.be/WrOVtlEXm6E)
+
