@@ -24,8 +24,16 @@ class TypeCheckVisitor(SimpleLangVisitor):
         self.errors.append(f"Unsupported operand types for * or /: {left_type} and {right_type}")
 
   def visitAddSub(self, ctx: SimpleLangParser.AddSubContext):
+    op = ctx.op.text
     left_type = self.visit(ctx.expr(0))
     right_type = self.visit(ctx.expr(1))
+    
+    if op == '+':
+      if isinstance(left_type, StringType) and isinstance(right_type, (StringType, IntType, BoolType)):
+          return StringType()
+      if isinstance(left_type, StringType) or isinstance(right_type, StringType):
+          self.errors.append(f"Cannot add {left_type} and {right_type}")
+          return
     
     if isinstance(left_type, (IntType, FloatType)) and isinstance(right_type, (IntType, FloatType)):
         return FloatType() if isinstance(left_type, FloatType) or isinstance(right_type, FloatType) else IntType()
